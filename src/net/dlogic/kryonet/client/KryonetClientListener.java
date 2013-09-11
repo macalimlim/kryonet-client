@@ -1,5 +1,7 @@
 package net.dlogic.kryonet.client;
 
+import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
+import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.common.response.JoinRoomFailureResponse;
 import net.dlogic.kryonet.common.response.JoinRoomSuccessResponse;
@@ -14,9 +16,17 @@ import com.esotericsoftware.kryonet.Listener;
 
 public class KryonetClientListener extends Listener {
 	private IRoomEventCallback roomEventCallback;
+	private ILoginOrLogoutEventCallback loginOrLogoutEventCallback;
+	private IPersonMessageEventCallback personMessageEventCallback;
 	public void setRoomEventCallback(IRoomEventCallback callback) {
 		roomEventCallback = callback;
-	} 
+	}
+	public void setLoginOrLogoutEventCallback(ILoginOrLogoutEventCallback callback) {
+		loginOrLogoutEventCallback = callback;
+	}
+	public void setPersonMessageEventCallback(IPersonMessageEventCallback callback) {
+		personMessageEventCallback = callback;
+	}
 	public void connected(Connection connection) {
 		// TODO Auto-generated method stub
 		super.connected(connection);
@@ -33,15 +43,20 @@ public class KryonetClientListener extends Listener {
 			JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
 			roomEventCallback.onJoinRoomSuccess();
 		} else if (object instanceof LoginFailureResponse) {
-			
+			LoginFailureResponse response = (LoginFailureResponse)object;
+			loginOrLogoutEventCallback.onLoginFailure(response.errorMessage);
 		} else if (object instanceof LoginSuccessResponse) {
-			
+			LoginSuccessResponse response = (LoginSuccessResponse)object;
+			loginOrLogoutEventCallback.onLoginSuccess(response.myself);
 		} else if (object instanceof LogoutResponse) {
-			
+			LogoutResponse response = (LogoutResponse)object;
+			loginOrLogoutEventCallback.onLogout();
 		} else if (object instanceof PrivateMessageResponse) {
-			
+			PrivateMessageResponse response = (PrivateMessageResponse)object;
+			personMessageEventCallback.onPrivateMessage(response.sender, response.message);
 		} else if (object instanceof PublicMessageResponse) {
-			
+			PublicMessageResponse response = (PublicMessageResponse)object;
+			personMessageEventCallback.onPublicMessage(response.sender, response.message);
 		}
 	}
 	public void idle(Connection connection) {
