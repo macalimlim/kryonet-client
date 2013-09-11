@@ -24,7 +24,7 @@ public class KryonetClient {
 			client.start();
 			client.connect(timeout, host, tcpPort, udpPort);
 		} else {
-			throw new KryonetClientException("client already connected");
+			throw new KryonetClientException("client already started");
 		}
 	}
 	public KryonetClientListener getKryonetClientListener() {
