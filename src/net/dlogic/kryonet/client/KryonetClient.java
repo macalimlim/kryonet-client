@@ -6,6 +6,7 @@ import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
 import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.common.request.LoginRequest;
+import net.dlogic.kryonet.common.request.LogoutRequest;
 import net.dlogic.kryonet.common.utility.KryonetUtility;
 
 import com.esotericsoftware.kryonet.Client;
@@ -40,6 +41,10 @@ public class KryonetClient {
 		LoginRequest request = new LoginRequest();
 		request.username = username;
 		request.password = password;
+		client.sendTCP(request);
+	}
+	public void sendLogoutRequest() {
+		LogoutRequest request = new LogoutRequest();
 		client.sendTCP(request);
 	}
 }
