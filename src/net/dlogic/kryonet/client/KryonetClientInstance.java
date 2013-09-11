@@ -4,15 +4,15 @@ import java.io.IOException;
 
 public class KryonetClientInstance {
 	private static KryonetClient client;
-	public static void initialize(int writeBufferSize, int objectBufferSize, int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientInstanceException {
+	public static void initialize(int writeBufferSize, int objectBufferSize) throws IOException, KryonetClientException {
 		if (client != null) {
-			throw new KryonetClientInstanceException(KryonetClientInstanceException.ALREADY_INITIALIZED);
+			throw new KryonetClientException(KryonetClientException.ALREADY_INITIALIZED);
 		}
-		client = new KryonetClient(writeBufferSize, objectBufferSize, timeout, host, tcpPort, udpPort);
+		client = new KryonetClient(writeBufferSize, objectBufferSize);
 	}
-	public static KryonetClient getInstance() throws KryonetClientInstanceException {
+	public static KryonetClient getInstance() throws KryonetClientException {
 		if (client == null) {
-			throw new KryonetClientInstanceException(KryonetClientInstanceException.NOT_INITIALIZED);
+			throw new KryonetClientException(KryonetClientException.NOT_INITIALIZED);
 		}
 		return client;
 	}
