@@ -2,9 +2,8 @@ package net.dlogic.kryonet.client;
 
 import java.io.IOException;
 
-import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
-import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
-import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
+import net.dlogic.kryonet.common.entity.Room;
+import net.dlogic.kryonet.common.request.JoinRoomRequest;
 import net.dlogic.kryonet.common.request.LoginRequest;
 import net.dlogic.kryonet.common.request.LogoutRequest;
 import net.dlogic.kryonet.common.utility.KryonetUtility;
@@ -36,6 +35,12 @@ public class KryonetClient {
 	}
 	public void registerClass(Class type) {
 		client.getKryo().register(type);
+	}
+	public void sendJoinRoomRequest(Room roomToJoin, String password) {
+		JoinRoomRequest request = new JoinRoomRequest();
+		request.roomToJoin = roomToJoin;
+		request.password = password;
+		client.sendTCP(request);
 	}
 	public void sendLoginRequest(String username, String password) {
 		LoginRequest request = new LoginRequest();
