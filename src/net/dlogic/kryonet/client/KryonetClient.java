@@ -3,9 +3,13 @@ package net.dlogic.kryonet.client;
 import java.io.IOException;
 
 import net.dlogic.kryonet.common.entity.Room;
+import net.dlogic.kryonet.common.entity.User;
 import net.dlogic.kryonet.common.request.JoinRoomRequest;
+import net.dlogic.kryonet.common.request.LeaveRoomRequest;
 import net.dlogic.kryonet.common.request.LoginRequest;
 import net.dlogic.kryonet.common.request.LogoutRequest;
+import net.dlogic.kryonet.common.request.PrivateMessageRequest;
+import net.dlogic.kryonet.common.request.PublicMessageRequest;
 import net.dlogic.kryonet.common.utility.KryonetUtility;
 
 import com.esotericsoftware.kryonet.Client;
@@ -42,6 +46,11 @@ public class KryonetClient {
 		request.password = password;
 		client.sendTCP(request);
 	}
+	public void sendLeaveRoomRequest(Room roomToLeave) {
+		LeaveRoomRequest request = new LeaveRoomRequest();
+		request.roomToLeave = roomToLeave;
+		client.sendTCP(request);
+	}
 	public void sendLoginRequest(String username, String password) {
 		LoginRequest request = new LoginRequest();
 		request.username = username;
@@ -50,6 +59,18 @@ public class KryonetClient {
 	}
 	public void sendLogoutRequest() {
 		LogoutRequest request = new LogoutRequest();
+		client.sendTCP(request);
+	}
+	public void sendPrivateMessageRequest(User targetUser, String message) {
+		PrivateMessageRequest request = new PrivateMessageRequest();
+		request.targetUserId = targetUser.id;
+		request.message = message;
+		client.sendTCP(request);
+	}
+	public void sendPublicMessageRequest(Room targetRoom, String message) {
+		PublicMessageRequest request = new PublicMessageRequest();
+		request.targetRoomId = targetRoom.id;
+		request.message = message;
 		client.sendTCP(request);
 	}
 }
