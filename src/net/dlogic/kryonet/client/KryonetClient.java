@@ -14,16 +14,19 @@ import net.dlogic.kryonet.common.utility.KryonetUtility;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 
 public class KryonetClient {
 	private Client client;
 	private KryonetClientListener listener;
 	public KryonetClient(int writeBufferSize, int objectBufferSize) {
+		Log.info("KryonetClient(" + writeBufferSize + ", " + objectBufferSize + ")");
 		client = new Client(writeBufferSize, objectBufferSize);
 		KryonetUtility.registerClasses(client);
 		client.addListener(listener = new KryonetClientListener());
 	}
 	public void start(int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
+		Log.info("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
 		if (!client.isConnected()) {
 			client.start();
 			client.connect(timeout, host, tcpPort, udpPort);

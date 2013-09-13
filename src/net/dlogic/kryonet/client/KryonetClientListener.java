@@ -13,11 +13,15 @@ import net.dlogic.kryonet.common.response.PublicMessageResponse;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 
 public class KryonetClientListener extends Listener {
 	private IRoomEventCallback roomEventCallback;
 	private ILoginOrLogoutEventCallback loginOrLogoutEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
+	public KryonetClientListener() {
+		Log.info("KryonetClientListener()");
+	}
 	public void setRoomEventCallback(IRoomEventCallback callback) {
 		roomEventCallback = callback;
 	}
