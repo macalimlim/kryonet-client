@@ -55,6 +55,7 @@ public class KryonetClient {
 		client.sendTCP(request);
 	}
 	public void sendLoginRequest(String username, String password) {
+		Log.info("KryonetClient.sendLoginRequest(" + username + ", " + password + ")");
 		LoginRequest request = new LoginRequest();
 		request.username = username;
 		request.password = password;
