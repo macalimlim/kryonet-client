@@ -32,14 +32,12 @@ public class KryonetClient {
 			client.connect(timeout, host, tcpPort, udpPort);
 			new Thread(new Runnable() {
 				public void run() {
-					//while (true) {
-						try {
-							client.update(timeout);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					//}
+					try {
+						client.update(timeout);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}).start();
 		} else {
