@@ -25,11 +25,23 @@ public class KryonetClient {
 		KryonetUtility.registerClasses(client);
 		client.addListener(listener = new KryonetClientListener());
 	}
-	public void start(int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
+	public void start(final int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
 		Log.info("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
 		if (!client.isConnected()) {
 			client.start();
 			client.connect(timeout, host, tcpPort, udpPort);
+			new Thread(new Runnable() {
+				public void run() {
+					//while (true) {
+						try {
+							client.update(timeout);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					//}
+				}
+			}).start();
 		} else {
 			throw new KryonetClientException("client already started");
 		}
