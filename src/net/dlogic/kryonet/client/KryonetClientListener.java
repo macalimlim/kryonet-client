@@ -37,12 +37,10 @@ public class KryonetClientListener extends Listener {
 		personMessageEventCallback = callback;
 	}
 	public void connected(Connection connection) {
-		// TODO Auto-generated method stub
-		super.connected(connection);
+		connectionEventCallback.onConnected();
 	}
 	public void disconnected(Connection connection) {
-		// TODO Auto-generated method stub
-		super.disconnected(connection);
+		connectionEventCallback.onDisconnected();
 	}
 	public void received(Connection connection, Object object) {
 		Log.info("KryonetClientListener.received()");
@@ -59,7 +57,6 @@ public class KryonetClientListener extends Listener {
 			LoginSuccessResponse response = (LoginSuccessResponse)object;
 			loginOrLogoutEventCallback.onLoginSuccess(response.myself);
 		} else if (object instanceof LogoutResponse) {
-			LogoutResponse response = (LogoutResponse)object;
 			loginOrLogoutEventCallback.onLogout();
 		} else if (object instanceof PrivateMessageResponse) {
 			PrivateMessageResponse response = (PrivateMessageResponse)object;
