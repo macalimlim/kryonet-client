@@ -40,6 +40,7 @@ public class KryonetClientListener extends Listener {
 		super.disconnected(connection);
 	}
 	public void received(Connection connection, Object object) {
+		Log.info("KryonetClientListener.received()");
 		if (object instanceof JoinRoomFailureResponse) {
 			JoinRoomFailureResponse response = (JoinRoomFailureResponse)object;
 			roomEventCallback.onJoinRoomFailure(response.errorMessage);
