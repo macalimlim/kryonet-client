@@ -1,5 +1,6 @@
 package net.dlogic.kryonet.client;
 
+import net.dlogic.kryonet.client.event.callback.IConnectionEventCallback;
 import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
 import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
@@ -16,11 +17,15 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 public class KryonetClientListener extends Listener {
+	private IConnectionEventCallback connectionEventCallback;
 	private IRoomEventCallback roomEventCallback;
 	private ILoginOrLogoutEventCallback loginOrLogoutEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
 	public KryonetClientListener() {
 		Log.info("KryonetClientListener()");
+	}
+	public void setConnectionEventCallback(IConnectionEventCallback callback) {
+		connectionEventCallback = callback;
 	}
 	public void setRoomEventCallback(IRoomEventCallback callback) {
 		roomEventCallback = callback;
