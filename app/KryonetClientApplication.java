@@ -3,7 +3,6 @@ import java.io.IOException;
 import net.dlogic.kryonet.client.KryonetClient;
 import net.dlogic.kryonet.client.KryonetClientException;
 import net.dlogic.kryonet.client.KryonetClientInstance;
-import net.dlogic.kryonet.client.KryonetClientListener;
 
 public class KryonetClientApplication {
 	public static void main(String[] args) {
@@ -16,11 +15,10 @@ public class KryonetClientApplication {
 			int udpPort = Integer.parseInt(args[5]);
 			KryonetClientInstance.initialize(writeBufferSize, objectBufferSize);
 			KryonetClient client = KryonetClientInstance.getInstance();
-			KryonetClientListener listener = client.getKryonetClientListener();
-			listener.setConnectionEventCallback(new ConnectionEventCallback());
-			listener.setLoginOrLogoutEventCallback(new LoginOrLogoutEventCallback());
-			listener.setPersonMessageEventCallback(new PersonMessageEventCallback());
-			listener.setRoomEventCallback(new RoomEventCallback());
+			client.listener.setConnectionEventCallback(new ConnectionEventCallback());
+			client.listener.setLoginOrLogoutEventCallback(new LoginOrLogoutEventCallback());
+			client.listener.setPersonMessageEventCallback(new PersonMessageEventCallback());
+			client.listener.setRoomEventCallback(new RoomEventCallback());
 			client.start(timeout, host, tcpPort, udpPort);
 			client.sendLoginRequest("mike", "mike");
 		} catch (IOException e) {
