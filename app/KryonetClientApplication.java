@@ -17,6 +17,7 @@ public class KryonetClientApplication {
 			KryonetClientInstance.initialize(writeBufferSize, objectBufferSize);
 			KryonetClient client = KryonetClientInstance.getInstance();
 			KryonetClientListener listener = client.getKryonetClientListener();
+			listener.setConnectionEventCallback(new ConnectionEventCallback());
 			listener.setLoginOrLogoutEventCallback(new LoginOrLogoutEventCallback());
 			listener.setPersonMessageEventCallback(new PersonMessageEventCallback());
 			listener.setRoomEventCallback(new RoomEventCallback());
