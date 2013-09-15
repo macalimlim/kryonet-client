@@ -1,6 +1,7 @@
 package net.dlogic.kryonet.client;
 
 import net.dlogic.kryonet.client.event.callback.IConnectionEventCallback;
+import net.dlogic.kryonet.client.event.callback.IErrorEventCallback;
 import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
 import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
@@ -19,12 +20,16 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 public class KryonetClientListener extends Listener {
+	private IErrorEventCallback errorEventCallback;
 	private IConnectionEventCallback connectionEventCallback;
 	private IRoomEventCallback roomEventCallback;
 	private ILoginOrLogoutEventCallback loginOrLogoutEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
 	public KryonetClientListener() {
 		Log.info("KryonetClientListener()");
+	}
+	public void setErrorEventCallback(IErrorEventCallback callback) {
+		errorEventCallback = callback;
 	}
 	public void setConnectionEventCallback(IConnectionEventCallback callback) {
 		connectionEventCallback = callback;
@@ -47,7 +52,8 @@ public class KryonetClientListener extends Listener {
 	public void received(Connection connection, Object object) {
 		Log.info("KryonetClientListener.received()");
 		if (object instanceof ErrorResponse) {
-			
+			ErrorResponse response = (ErrorResponse)object;
+			errorEventCallback.onError(response.errorMessage);
 		} else if (object instanceof GetRoomsResponse) {
 			GetRoomsResponse response = (GetRoomsResponse)object;
 			roomEventCallback.onGetRooms(response.roomList);
