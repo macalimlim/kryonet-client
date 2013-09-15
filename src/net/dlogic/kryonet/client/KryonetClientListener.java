@@ -4,6 +4,7 @@ import net.dlogic.kryonet.client.event.callback.IConnectionEventCallback;
 import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
 import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
+import net.dlogic.kryonet.common.response.ErrorResponse;
 import net.dlogic.kryonet.common.response.GetRoomsResponse;
 import net.dlogic.kryonet.common.response.JoinRoomFailureResponse;
 import net.dlogic.kryonet.common.response.JoinRoomSuccessResponse;
@@ -45,7 +46,9 @@ public class KryonetClientListener extends Listener {
 	}
 	public void received(Connection connection, Object object) {
 		Log.info("KryonetClientListener.received()");
-		if (object instanceof GetRoomsResponse) {
+		if (object instanceof ErrorResponse) {
+			
+		} else if (object instanceof GetRoomsResponse) {
 			GetRoomsResponse response = (GetRoomsResponse)object;
 			roomEventCallback.onGetRooms(response.roomList);
 		} else if (object instanceof JoinRoomFailureResponse) {
