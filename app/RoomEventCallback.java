@@ -1,3 +1,5 @@
+import java.util.List;
+
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.common.entity.Room;
 import net.dlogic.kryonet.common.entity.User;
@@ -15,6 +17,12 @@ public class RoomEventCallback implements IRoomEventCallback {
 	public void onJoinRoomSuccess(User joinedUser, Room joinedRoom) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onGetRooms(List<Room> roomList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
