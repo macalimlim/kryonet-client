@@ -28,6 +28,7 @@ public class KryonetClientApplication {
 			client.sendLoginRequest("mike", "mikex");
 			client.sendLoginRequest("mike", "mike");
 			client.sendGetRoomsRequest(null);
+			client.sendGetRoomsRequest("chat");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (KryonetClientException e) {
