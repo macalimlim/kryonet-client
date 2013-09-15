@@ -17,12 +17,12 @@ import com.esotericsoftware.minlog.Log;
 
 public class KryonetClient {
 	public Client endpoint;
-	public KryonetClientListener listener;
+	public final KryonetClientListener listener = new KryonetClientListener();
 	public KryonetClient(int writeBufferSize, int objectBufferSize) {
 		Log.info("KryonetClient(" + writeBufferSize + ", " + objectBufferSize + ")");
 		endpoint = new Client(writeBufferSize, objectBufferSize);
 		KryonetUtility.registerClasses(endpoint);
-		endpoint.addListener(listener = new KryonetClientListener());
+		endpoint.addListener(listener);
 	}
 	public void start(final int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
 		Log.info("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
