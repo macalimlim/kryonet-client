@@ -3,6 +3,7 @@ import java.io.IOException;
 import net.dlogic.kryonet.client.KryonetClient;
 import net.dlogic.kryonet.client.KryonetClientException;
 import net.dlogic.kryonet.client.KryonetClientInstance;
+import net.dlogic.kryonet.common.utility.KryonetUtility;
 
 public class KryonetClientApplication {
 	public static void main(String[] args) {
@@ -16,11 +17,17 @@ public class KryonetClientApplication {
 			KryonetClientInstance.initialize(writeBufferSize, objectBufferSize);
 			KryonetClient client = KryonetClientInstance.getInstance();
 			client.listener.setConnectionEventCallback(new ConnectionEventCallback());
-			client.listener.setLoginOrLogoutEventCallback(new LoginOrLogoutEventCallback());
+			client.listener.setLoginOrLogoutEventCallback(new UserEventCallback());
 			client.listener.setPersonMessageEventCallback(new PersonMessageEventCallback());
 			client.listener.setRoomEventCallback(new RoomEventCallback());
+			client.listener.setErrorEventCallback(new ErrorEventCallback());
+			KryonetUtility.registerClass(client.endpoint, CustomRequest.class);
+			KryonetUtility.registerClass(client.endpoint, CustomResponse.class);
+			client.endpoint.addListener(new CustomClientListener());
 			client.start(timeout, host, tcpPort, udpPort);
+			client.sendLoginRequest("mike", "mikex");
 			client.sendLoginRequest("mike", "mike");
+			client.sendGetRoomsRequest(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (KryonetClientException e) {
