@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import net.dlogic.kryonet.common.entity.Room;
 import net.dlogic.kryonet.common.entity.User;
+import net.dlogic.kryonet.common.request.GetRoomsRequest;
 import net.dlogic.kryonet.common.request.JoinRoomRequest;
 import net.dlogic.kryonet.common.request.LeaveRoomRequest;
 import net.dlogic.kryonet.common.request.LoginRequest;
@@ -41,6 +42,11 @@ public class KryonetClient {
 		} else {
 			throw new KryonetClientException("client already started");
 		}
+	}
+	public void sendGetRoomsRequest(String search) {
+		GetRoomsRequest request = new GetRoomsRequest();
+		request.search = search;
+		endpoint.sendTCP(request);
 	}
 	public void sendJoinRoomRequest(Room roomToJoin, String password) {
 		JoinRoomRequest request = new JoinRoomRequest();
