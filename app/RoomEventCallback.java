@@ -1,12 +1,8 @@
-import java.util.Iterator;
-import java.util.List;
-
-import com.esotericsoftware.minlog.Log;
-
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.common.entity.Room;
 import net.dlogic.kryonet.common.entity.User;
 
+import com.esotericsoftware.minlog.Log;
 
 public class RoomEventCallback implements IRoomEventCallback {
 
@@ -23,10 +19,8 @@ public class RoomEventCallback implements IRoomEventCallback {
 	}
 
 	@Override
-	public void onGetRooms(List<Room> roomList) {
-		Iterator<Room> it = roomList.iterator();
-		while (it.hasNext()) {
-			Room room = it.next();
+	public void onGetRooms(Room[] rooms) {
+		for (Room room : rooms) {
 			Log.info(room.name);
 		}
 	}

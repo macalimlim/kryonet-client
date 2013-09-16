@@ -56,7 +56,7 @@ public class KryonetClientListener extends Listener {
 			errorEventCallback.onError(response.errorMessage);
 		} else if (object instanceof GetRoomsResponse) {
 			GetRoomsResponse response = (GetRoomsResponse)object;
-			roomEventCallback.onGetRooms(response.roomList);
+			roomEventCallback.onGetRooms(response.rooms);
 		} else if (object instanceof JoinRoomFailureResponse) {
 			JoinRoomFailureResponse response = (JoinRoomFailureResponse)object;
 			roomEventCallback.onJoinRoomFailure(response.errorMessage);
