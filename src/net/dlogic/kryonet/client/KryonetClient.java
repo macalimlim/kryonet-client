@@ -28,17 +28,8 @@ public class KryonetClient {
 	public void start(final int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
 		Log.info("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
 		if (!endpoint.isConnected()) {
-			endpoint.start();
+			new Thread(endpoint).start();
 			endpoint.connect(timeout, host, tcpPort, udpPort);
-			new Thread(new Runnable() {
-				public void run() {
-					try {
-						endpoint.update(timeout);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}).start();
 		} else {
 			throw new KryonetClientException("client already started");
 		}
