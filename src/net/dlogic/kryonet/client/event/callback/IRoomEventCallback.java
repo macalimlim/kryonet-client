@@ -6,5 +6,6 @@ import net.dlogic.kryonet.common.entity.User;
 public interface IRoomEventCallback {
 	public void onGetRooms(Room[] rooms);
 	public void onJoinRoomFailure(String errorMessage);
-	public void onJoinRoomSuccess(User joinedUser, Room joinedRoom);
+	public void onJoinRoomSuccess(User userJoined, Room roomJoined);
+	public void onLeaveRoom(User userLeft, Room roomLeft);
 }
