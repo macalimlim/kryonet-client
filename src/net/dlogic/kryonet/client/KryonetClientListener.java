@@ -2,7 +2,7 @@ package net.dlogic.kryonet.client;
 
 import net.dlogic.kryonet.client.event.callback.IConnectionEventCallback;
 import net.dlogic.kryonet.client.event.callback.IErrorEventCallback;
-import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
+import net.dlogic.kryonet.client.event.callback.IUserEventCallback;
 import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.common.response.ErrorResponse;
@@ -23,7 +23,7 @@ public class KryonetClientListener extends Listener {
 	private IErrorEventCallback errorEventCallback;
 	private IConnectionEventCallback connectionEventCallback;
 	private IRoomEventCallback roomEventCallback;
-	private ILoginOrLogoutEventCallback loginOrLogoutEventCallback;
+	private IUserEventCallback loginOrLogoutEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
 	public KryonetClientListener() {
 		Log.info("KryonetClientListener()");
@@ -37,7 +37,7 @@ public class KryonetClientListener extends Listener {
 	public void setRoomEventCallback(IRoomEventCallback callback) {
 		roomEventCallback = callback;
 	}
-	public void setLoginOrLogoutEventCallback(ILoginOrLogoutEventCallback callback) {
+	public void setLoginOrLogoutEventCallback(IUserEventCallback callback) {
 		loginOrLogoutEventCallback = callback;
 	}
 	public void setPersonMessageEventCallback(IPersonMessageEventCallback callback) {
