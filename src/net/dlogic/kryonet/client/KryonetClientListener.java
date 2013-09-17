@@ -8,7 +8,6 @@ import net.dlogic.kryonet.client.event.callback.IUserEventCallback;
 import net.dlogic.kryonet.common.entity.Myself;
 import net.dlogic.kryonet.common.manager.MyselfInstance;
 import net.dlogic.kryonet.common.manager.RoomManager;
-import net.dlogic.kryonet.common.manager.RoomManagerException;
 import net.dlogic.kryonet.common.manager.RoomManagerInstance;
 import net.dlogic.kryonet.common.manager.UserManager;
 import net.dlogic.kryonet.common.manager.UserManagerInstance;
