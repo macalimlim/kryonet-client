@@ -25,4 +25,10 @@ public class RoomEventCallback implements IRoomEventCallback {
 		}
 	}
 
+	@Override
+	public void onLeaveRoom(User userLeft, Room roomLeft) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
