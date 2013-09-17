@@ -1,10 +1,10 @@
 import com.esotericsoftware.minlog.Log;
 
-import net.dlogic.kryonet.client.event.callback.ILoginOrLogoutEventCallback;
+import net.dlogic.kryonet.client.event.callback.IUserEventCallback;
 import net.dlogic.kryonet.common.entity.User;
 
 
-public class UserEventCallback implements ILoginOrLogoutEventCallback {
+public class UserEventCallback implements IUserEventCallback {
 
 	@Override
 	public void onLoginFailure(String errorMessage) {
