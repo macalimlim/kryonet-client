@@ -41,13 +41,13 @@ public class KryonetClient {
 	}
 	public void sendJoinRoomRequest(Room roomToJoin, String password) {
 		JoinRoomRequest request = new JoinRoomRequest();
-		request.targetRoomId = roomToJoin.id;
+		request.targetRoomName = roomToJoin.name;
 		request.password = password;
 		endpoint.sendTCP(request);
 	}
 	public void sendLeaveRoomRequest(Room roomToLeave) {
 		LeaveRoomRequest request = new LeaveRoomRequest();
-		request.targetRoomId = roomToLeave.id;
+		request.targetRoomName = roomToLeave.name;
 		endpoint.sendTCP(request);
 	}
 	public void sendLoginRequest(String username, String password) {
@@ -69,7 +69,7 @@ public class KryonetClient {
 	}
 	public void sendPublicMessageRequest(Room targetRoom, String message) {
 		PublicMessageRequest request = new PublicMessageRequest();
-		request.targetRoomId = targetRoom.id;
+		request.targetRoomName = targetRoom.name;
 		request.message = message;
 		endpoint.sendTCP(request);
 	}
