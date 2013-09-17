@@ -9,11 +9,14 @@ import net.dlogic.kryonet.common.entity.Myself;
 import net.dlogic.kryonet.common.manager.MyselfInstance;
 import net.dlogic.kryonet.common.manager.RoomManager;
 import net.dlogic.kryonet.common.manager.RoomManagerException;
+import net.dlogic.kryonet.common.manager.RoomManagerInstance;
 import net.dlogic.kryonet.common.manager.UserManager;
+import net.dlogic.kryonet.common.manager.UserManagerInstance;
 import net.dlogic.kryonet.common.response.ErrorResponse;
 import net.dlogic.kryonet.common.response.GetRoomsResponse;
 import net.dlogic.kryonet.common.response.JoinRoomFailureResponse;
 import net.dlogic.kryonet.common.response.JoinRoomSuccessResponse;
+import net.dlogic.kryonet.common.response.LeaveRoomResponse;
 import net.dlogic.kryonet.common.response.LoginFailureResponse;
 import net.dlogic.kryonet.common.response.LoginSuccessResponse;
 import net.dlogic.kryonet.common.response.LogoutResponse;
@@ -26,6 +29,8 @@ import com.esotericsoftware.minlog.Log;
 
 public class KryonetClientListener extends Listener {
 	private Myself myself = MyselfInstance.myself;
+	private UserManager userManager = UserManagerInstance.manager;
+	private RoomManager roomManager = RoomManagerInstance.manager;
 	private IErrorEventCallback errorEventCallback;
 	private IConnectionEventCallback connectionEventCallback;
 	private IRoomEventCallback roomEventCallback;
@@ -77,20 +82,21 @@ public class KryonetClientListener extends Listener {
 			JoinRoomFailureResponse response = (JoinRoomFailureResponse)object;
 			roomEventCallback.onJoinRoomFailure(response.errorMessage);
 		} else if (object instanceof JoinRoomSuccessResponse) {
-			try {
-				JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
-				response.joinedUser.isItMe = (myself.id == response.joinedUser.id) ? true : false;
-				UserManager userManager = myself.userManager;
-				RoomManager roomManager = myself.roomManager;
-				if (!roomManager.map.containsKey(response.joinedRoom.name)) {
-					roomManager.map.put(response.joinedRoom.name, response.joinedRoom);
-				}
-				userManager.map.put(response.joinedUser.id, response.joinedUser);
-				roomManager.addUserToRoom(response.joinedUser, response.joinedRoom.name);
-				roomEventCallback.onJoinRoomSuccess(response.joinedUser, response.joinedRoom);
-			} catch (RoomManagerException e) {
-				roomEventCallback.onJoinRoomFailure(e.getMessage());
+			JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
+			response.userJoined.isItMe = (myself.id == response.userJoined.id) ? true : false;
+			if (!roomManager.map.containsKey(response.roomJoined.name)) {
+				roomManager.map.put(response.roomJoined.name, response.roomJoined);
 			}
+			userManager.map.put(response.userJoined.id, response.userJoined);
+			//roomManager.addUserToRoom(response.userJoined, response.roomJoined.name);
+			roomEventCallback.onJoinRoomSuccess(response.userJoined, response.roomJoined);
+		} else if (object instanceof LeaveRoomResponse) {
+			LeaveRoomResponse response = (LeaveRoomResponse)object;
+			if (!roomManager.map.containsKey(response.roomLeft.name)) {
+				roomManager.map.put(response.roomLeft.name, response.roomLeft);
+			}
+			//roomManager.removeUserToRoom(response.userLeft, response.roomLeft.name);
+			roomEventCallback.onLeaveRoom(response.userLeft, response.roomLeft);
 		} else if (object instanceof LoginFailureResponse) {
 			LoginFailureResponse response = (LoginFailureResponse)object;
 			loginOrLogoutEventCallback.onLoginFailure(response.errorMessage);
