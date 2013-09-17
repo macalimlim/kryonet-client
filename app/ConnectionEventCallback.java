@@ -15,4 +15,10 @@ public class ConnectionEventCallback implements IConnectionEventCallback {
 		
 	}
 
+	@Override
+	public void onIdle() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
