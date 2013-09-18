@@ -6,8 +6,10 @@ import net.dlogic.kryonet.client.event.callback.IPersonMessageEventCallback;
 import net.dlogic.kryonet.client.event.callback.IRoomEventCallback;
 import net.dlogic.kryonet.client.event.callback.IUserEventCallback;
 import net.dlogic.kryonet.common.entity.Myself;
+import net.dlogic.kryonet.common.entity.User;
 import net.dlogic.kryonet.common.manager.MyselfInstance;
 import net.dlogic.kryonet.common.manager.RoomManager;
+import net.dlogic.kryonet.common.manager.RoomManagerException;
 import net.dlogic.kryonet.common.manager.RoomManagerInstance;
 import net.dlogic.kryonet.common.manager.UserManager;
 import net.dlogic.kryonet.common.manager.UserManagerInstance;
@@ -58,7 +60,8 @@ public class KryonetClientListener extends Listener {
 		myself.isAdmin = false;
 		myself.isItMe = true;
 		myself.isPlayer = false;
-		myself.roomManager.map.clear();
+		roomManager.map.clear();
+		userManager.map.put(myself.id, myself);
 		connectionEventCallback.onConnected();
 	}
 	public void disconnected(Connection connection) {
@@ -66,7 +69,8 @@ public class KryonetClientListener extends Listener {
 		myself.isAdmin = false;
 		myself.isItMe = false;
 		myself.isPlayer = false;
-		myself.roomManager.map.clear();
+		roomManager.map.clear();
+		userManager.map.clear();
 		connectionEventCallback.onDisconnected();
 	}
 	public void received(Connection connection, Object object) {
@@ -81,21 +85,33 @@ public class KryonetClientListener extends Listener {
 			JoinRoomFailureResponse response = (JoinRoomFailureResponse)object;
 			roomEventCallback.onJoinRoomFailure(response.errorMessage);
 		} else if (object instanceof JoinRoomSuccessResponse) {
-			JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
-			response.userJoined.isItMe = (myself.id == response.userJoined.id) ? true : false;
-			if (!roomManager.map.containsKey(response.roomJoined.name)) {
-				roomManager.map.put(response.roomJoined.name, response.roomJoined);
+			try {
+				JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
+				response.userJoined.isItMe = (myself.id == response.userJoined.id) ? true : false;
+				if (!userManager.map.containsKey(response.userJoined.id)) {
+					userManager.map.put(response.userJoined.id, response.userJoined);
+				}
+				if (!roomManager.map.containsKey(response.roomJoined.name)) {
+					roomManager.map.put(response.roomJoined.name, response.roomJoined);
+				}
+				User userJoined = userManager.map.get(response.userJoined.id);
+				roomManager.addUserToRoom(userJoined, response.roomJoined.name);
+				roomEventCallback.onJoinRoomSuccess(response.userJoined, response.roomJoined);
+			} catch (RoomManagerException e) {
+				roomEventCallback.onJoinRoomFailure(e.getMessage());
 			}
-			userManager.map.put(response.userJoined.id, response.userJoined);
-			//roomManager.addUserToRoom(response.userJoined, response.roomJoined.name);
-			roomEventCallback.onJoinRoomSuccess(response.userJoined, response.roomJoined);
 		} else if (object instanceof LeaveRoomResponse) {
-			LeaveRoomResponse response = (LeaveRoomResponse)object;
-			if (!roomManager.map.containsKey(response.roomLeft.name)) {
-				roomManager.map.put(response.roomLeft.name, response.roomLeft);
+			try {
+				LeaveRoomResponse response = (LeaveRoomResponse)object;
+				response.userLeft.isItMe = (myself.id == response.userLeft.id) ? true : false;
+				roomManager.removeUserToRoom(response.userLeft, response.roomLeft.name);
+				if (!roomManager.isUserJoinedInAnyRoom(response.userLeft)) {
+					userManager.map.remove(response.userLeft.id);
+				}
+				roomEventCallback.onLeaveRoom(response.userLeft, response.roomLeft);
+			} catch (RoomManagerException e) {
+				errorEventCallback.onError(e.getMessage());
 			}
-			//roomManager.removeUserToRoom(response.userLeft, response.roomLeft.name);
-			roomEventCallback.onLeaveRoom(response.userLeft, response.roomLeft);
 		} else if (object instanceof LoginFailureResponse) {
 			LoginFailureResponse response = (LoginFailureResponse)object;
 			loginOrLogoutEventCallback.onLoginFailure(response.errorMessage);
@@ -122,6 +138,6 @@ public class KryonetClientListener extends Listener {
 		}
 	}
 	public void idle(Connection connection) {
-		super.idle(connection);
+		connectionEventCallback.onIdle();
 	}
 }
