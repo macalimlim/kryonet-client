@@ -104,7 +104,7 @@ public class KryonetClientListener extends Listener {
 			try {
 				LeaveRoomResponse response = (LeaveRoomResponse)object;
 				response.userLeft.isItMe = (myself.id == response.userLeft.id) ? true : false;
-				roomManager.removeUserToRoom(response.userLeft, response.roomLeft.name);
+				roomManager.removeUserFromRoom(response.userLeft, response.roomLeft.name);
 				if (!roomManager.isUserJoinedInAnyRoom(response.userLeft)) {
 					userManager.map.remove(response.userLeft.id);
 				}
@@ -127,7 +127,8 @@ public class KryonetClientListener extends Listener {
 			myself.isAdmin = false;
 			myself.isItMe = false;
 			myself.isPlayer = false;
-			myself.roomManager.map.clear();
+			roomManager.map.clear();
+			userManager.map.clear();
 			loginOrLogoutEventCallback.onLogout();
 		} else if (object instanceof PrivateMessageResponse) {
 			PrivateMessageResponse response = (PrivateMessageResponse)object;
