@@ -35,7 +35,7 @@ public class KryonetClientListener extends Listener {
 	private IErrorEventCallback errorEventCallback;
 	private IConnectionEventCallback connectionEventCallback;
 	private IRoomEventCallback roomEventCallback;
-	private IUserEventCallback loginOrLogoutEventCallback;
+	private IUserEventCallback userEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
 	public KryonetClientListener() {
 		Log.info("KryonetClientListener()");
@@ -50,7 +50,7 @@ public class KryonetClientListener extends Listener {
 		roomEventCallback = callback;
 	}
 	public void setLoginOrLogoutEventCallback(IUserEventCallback callback) {
-		loginOrLogoutEventCallback = callback;
+		userEventCallback = callback;
 	}
 	public void setPersonMessageEventCallback(IPersonMessageEventCallback callback) {
 		personMessageEventCallback = callback;
@@ -74,7 +74,7 @@ public class KryonetClientListener extends Listener {
 		connectionEventCallback.onDisconnected();
 	}
 	public void received(Connection connection, Object object) {
-		Log.info("KryonetClientListener.received()");
+		//Log.info("KryonetClientListener.received()");
 		if (object instanceof ErrorResponse) {
 			ErrorResponse response = (ErrorResponse)object;
 			errorEventCallback.onError(response.errorMessage);
@@ -114,14 +114,16 @@ public class KryonetClientListener extends Listener {
 			}
 		} else if (object instanceof LoginFailureResponse) {
 			LoginFailureResponse response = (LoginFailureResponse)object;
-			loginOrLogoutEventCallback.onLoginFailure(response.errorMessage);
+			userEventCallback.onLoginFailure(response.errorMessage);
 		} else if (object instanceof LoginSuccessResponse) {
 			LoginSuccessResponse response = (LoginSuccessResponse)object;
 			myself.username = response.myself.username;
 			myself.isAdmin = response.myself.isAdmin;
 			myself.isItMe = response.myself.isItMe;
 			myself.isPlayer = response.myself.isPlayer;
-			loginOrLogoutEventCallback.onLoginSuccess(response.myself);
+			roomManager.map.clear();
+			userManager.map.clear();
+			userEventCallback.onLoginSuccess(response.myself);
 		} else if (object instanceof LogoutResponse) {
 			myself.username = null;
 			myself.isAdmin = false;
@@ -129,7 +131,7 @@ public class KryonetClientListener extends Listener {
 			myself.isPlayer = false;
 			roomManager.map.clear();
 			userManager.map.clear();
-			loginOrLogoutEventCallback.onLogout();
+			userEventCallback.onLogout();
 		} else if (object instanceof PrivateMessageResponse) {
 			PrivateMessageResponse response = (PrivateMessageResponse)object;
 			personMessageEventCallback.onPrivateMessage(response.sender, response.message);
