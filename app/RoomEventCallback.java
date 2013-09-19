@@ -8,14 +8,12 @@ public class RoomEventCallback implements IRoomEventCallback {
 
 	@Override
 	public void onJoinRoomFailure(String errorMessage) {
-		// TODO Auto-generated method stub
-
+		Log.info(errorMessage);
 	}
 
 	@Override
 	public void onJoinRoomSuccess(User joinedUser, Room joinedRoom) {
-		// TODO Auto-generated method stub
-
+		Log.info(joinedUser.username + "=>" + joinedRoom.name);
 	}
 
 	@Override
