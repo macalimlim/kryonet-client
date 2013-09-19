@@ -3,6 +3,7 @@ import java.io.IOException;
 import net.dlogic.kryonet.client.KryonetClient;
 import net.dlogic.kryonet.client.KryonetClientException;
 import net.dlogic.kryonet.client.KryonetClientInstance;
+import net.dlogic.kryonet.common.entity.Room;
 import net.dlogic.kryonet.common.utility.KryonetUtility;
 
 public class KryonetClientApplication {
@@ -30,6 +31,9 @@ public class KryonetClientApplication {
 			client.sendGetRoomsRequest(null);
 			client.sendGetRoomsRequest("chat");
 			client.sendGetRoomsRequest("obb");
+			Room room = new Room();
+			room.name = "Game";
+			client.sendJoinRoomRequest(room, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (KryonetClientException e) {
