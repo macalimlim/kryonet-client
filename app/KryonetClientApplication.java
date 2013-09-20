@@ -1,5 +1,7 @@
 import java.io.IOException;
 
+import com.esotericsoftware.minlog.Log;
+
 import net.dlogic.kryonet.client.KryonetClient;
 import net.dlogic.kryonet.client.KryonetClientException;
 import net.dlogic.kryonet.client.KryonetClientInstance;
@@ -9,6 +11,7 @@ import net.dlogic.kryonet.common.utility.KryonetUtility;
 public class KryonetClientApplication {
 	public static void main(String[] args) {
 		try {
+			Log.DEBUG();
 			int writeBufferSize = Integer.parseInt(args[0]);
 			int objectBufferSize = Integer.parseInt(args[1]);
 			int timeout = Integer.parseInt(args[2]);
