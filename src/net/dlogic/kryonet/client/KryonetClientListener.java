@@ -56,6 +56,7 @@ public class KryonetClientListener extends Listener {
 		personMessageEventCallback = callback;
 	}
 	public void connected(Connection connection) {
+		Log.debug("KryonetClientListener.connected()");
 		myself.id = connection.getID();
 		myself.isAdmin = false;
 		myself.isItMe = true;
@@ -63,6 +64,7 @@ public class KryonetClientListener extends Listener {
 		roomManager.map.clear();
 		userManager.map.put(myself.id, myself);
 		connectionEventCallback.onConnected();
+		Log.debug(userManager.map.toString());
 	}
 	public void disconnected(Connection connection) {
 		myself.username = null;
@@ -88,6 +90,7 @@ public class KryonetClientListener extends Listener {
 			try {
 				JoinRoomSuccessResponse response = (JoinRoomSuccessResponse)object;
 				response.userJoined.isItMe = (myself.id == response.userJoined.id) ? true : false;
+				Log.debug(userManager.map.toString());
 				if (!userManager.map.containsKey(response.userJoined.id)) {
 					userManager.map.put(response.userJoined.id, response.userJoined);
 				}
@@ -95,6 +98,7 @@ public class KryonetClientListener extends Listener {
 					roomManager.map.put(response.roomJoined.name, response.roomJoined);
 				}
 				User userJoined = userManager.map.get(response.userJoined.id);
+				Log.debug("got from usermanager map: " + userJoined.username);
 				roomManager.addUserToRoom(userJoined, response.roomJoined.name);
 				roomEventCallback.onJoinRoomSuccess(response.userJoined, response.roomJoined);
 			} catch (RoomManagerException e) {
