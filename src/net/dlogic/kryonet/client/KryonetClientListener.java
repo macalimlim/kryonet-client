@@ -98,7 +98,6 @@ public class KryonetClientListener extends Listener {
 					roomManager.map.put(response.roomJoined.name, response.roomJoined);
 				}
 				User userJoined = userManager.map.get(response.userJoined.id);
-				Log.debug("got from usermanager map: " + userJoined.username);
 				roomManager.addUserToRoom(userJoined, response.roomJoined.name);
 				roomEventCallback.onJoinRoomSuccess(response.userJoined, response.roomJoined);
 			} catch (RoomManagerException e) {
