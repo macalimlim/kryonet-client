@@ -20,13 +20,13 @@ public class KryonetClient {
 	public Client endpoint;
 	public final KryonetClientListener listener = new KryonetClientListener();
 	public KryonetClient(int writeBufferSize, int objectBufferSize) {
-		Log.info("KryonetClient(" + writeBufferSize + ", " + objectBufferSize + ")");
+		Log.debug("KryonetClient(" + writeBufferSize + ", " + objectBufferSize + ")");
 		endpoint = new Client(writeBufferSize, objectBufferSize);
 		KryonetUtility.registerClasses(endpoint);
 		endpoint.addListener(listener);
 	}
 	public void start(final int timeout, String host, int tcpPort, int udpPort) throws IOException, KryonetClientException {
-		Log.info("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
+		Log.debug("KryonetClient.start(" + timeout + ", " + host + ", " + tcpPort + ", " + udpPort + ")");
 		if (!endpoint.isConnected()) {
 			new Thread(endpoint).start();
 			endpoint.connect(timeout, host, tcpPort, udpPort);
@@ -51,7 +51,7 @@ public class KryonetClient {
 		endpoint.sendTCP(request);
 	}
 	public void sendLoginRequest(String username, String password) {
-		Log.info("KryonetClient.sendLoginRequest(" + username + ", " + password + ")");
+		Log.debug("KryonetClient.sendLoginRequest(" + username + ", " + password + ")");
 		LoginRequest request = new LoginRequest();
 		request.username = username;
 		request.password = password;
