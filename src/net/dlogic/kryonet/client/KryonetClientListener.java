@@ -38,7 +38,7 @@ public class KryonetClientListener extends Listener {
 	private IUserEventCallback userEventCallback;
 	private IPersonMessageEventCallback personMessageEventCallback;
 	public KryonetClientListener() {
-		Log.info("KryonetClientListener()");
+		Log.debug("KryonetClientListener()");
 	}
 	public void setErrorEventCallback(IErrorEventCallback callback) {
 		errorEventCallback = callback;
@@ -64,9 +64,9 @@ public class KryonetClientListener extends Listener {
 		roomManager.map.clear();
 		userManager.map.put(myself.id, myself);
 		connectionEventCallback.onConnected();
-		Log.debug(userManager.map.toString());
 	}
 	public void disconnected(Connection connection) {
+		myself.id = 0;
 		myself.username = null;
 		myself.isAdmin = false;
 		myself.isItMe = false;
