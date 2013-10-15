@@ -76,6 +76,8 @@ public class KryonetClientListenerTest {
 		joinRoomSuccessResponse.userJoined = user;
 		// myself is in usermanager map
 		UserManagerInstance.manager.map.put(user.id, user);
+		assertEquals(0, RoomManagerInstance.manager.map.size());
+		assertEquals(0, room.users.size());
 		listener.received(connection, joinRoomSuccessResponse);
 		assertEquals(1, UserManagerInstance.manager.map.size());
 		assertEquals(1, RoomManagerInstance.manager.map.size());
@@ -83,6 +85,7 @@ public class KryonetClientListenerTest {
 		assertTrue(RoomManagerInstance.manager.map.containsKey(room.name));
 		Room roomJoined = RoomManagerInstance.manager.map.get(room.name);
 		assertTrue(roomJoined.users.containsKey(user.id));
+		assertEquals(1, roomJoined.users.size());
 	}
 	@Test
 	public void testReceived_JoinRoomSuccessResponse_OtherUsersJoiningARoom() {
@@ -95,12 +98,16 @@ public class KryonetClientListenerTest {
 		JoinRoomSuccessResponse joinRoomSuccessResponse = new JoinRoomSuccessResponse();
 		joinRoomSuccessResponse.roomJoined = room;
 		joinRoomSuccessResponse.userJoined = other;
+		assertEquals(1, RoomManagerInstance.manager.map.get(room.name).users.size());
+		assertEquals(1, UserManagerInstance.manager.map.size());
+		assertEquals(1, RoomManagerInstance.manager.map.size());
 		listener.received(connection, joinRoomSuccessResponse);
 		assertEquals(2, UserManagerInstance.manager.map.size());
 		assertEquals(1, RoomManagerInstance.manager.map.size());
 		assertTrue(UserManagerInstance.manager.map.containsKey(other.id));
 		Room roomJoined = RoomManagerInstance.manager.map.get(room.name);
 		assertTrue(roomJoined.users.containsKey(other.id));
+		assertEquals(2, roomJoined.users.size());
 		//
 		User other2 = new User();
 		other2.id = 3;
@@ -112,5 +119,6 @@ public class KryonetClientListenerTest {
 		assertEquals(1, RoomManagerInstance.manager.map.size());
 		assertTrue(UserManagerInstance.manager.map.containsKey(other2.id));
 		assertTrue(roomJoined.users.containsKey(other2.id));
+		assertEquals(3, roomJoined.users.size());
 	}
 }
